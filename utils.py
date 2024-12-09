@@ -177,3 +177,80 @@ def save_dict_to_csv(data: dict, csv_file_path: str) -> None:
             writer.writerow([key, value])
 
     logger.info(f"Successfully saved the data to '{csv_file_path}'.")
+
+
+def event_store_to_array(event_store: dv.EventStore) -> np.ndarray:
+    """
+    Converts the given event store into a numpy array.
+    :param event_store: An event store
+    :return: a numpy array with shape [2, 2] the x and y coordinates of the events.
+    """
+    return np.array(list(map(lambda event: [event.x(), event.y()], event_store)))
+
+
+def _activate_pixels(empty_image: np.ndarray, events: np.ndarray) -> np.ndarray:
+    """
+    Assigns 255 to the entries of the empty_image corresponding to the given events array.
+    :param empty_image: a zeros numpy array with shape (2, 2)
+    :param events: a numpy array containing the events
+    :return: a numpy array containing 255 in the inputs corresponding to the activated pixels and zero on the non activated pixels.
+    """
+    image = empty_image
+
+    for x, y in events:
+        image[y, x] = 255
+
+    return image
+
+
+def _build_image(resolution: tuple, events: np.ndarray) -> np.ndarray:
+    empty_image = np.zeros((resolution[1], resolution[0]), dtype=np.uint8)
+
+    return _activate_pixels(empty_image, events)
+
+
+def detect_line_angle(
+        resolution: tuple,
+        events: np.ndarray,
+        rho: int = 1,
+        theta: float = np.pi / 180,
+        threshold: int = 10,
+) -> tuple[float, tuple] | tuple[None, None]:
+    """
+    Uses the Hough Lines algorithm to detect lines in the events
+    :param resolution: a tuple specifying the width and height in pixels of the given events.
+    :param events: a numpy array containing the events
+    :param rho: The resolution of the parameter r in pixels. 1 by default.
+    :param theta: The resolution of the parameter theta in degrees. 1 degree by default.
+    :param threshold: The minimum number of intersection to detect a line.
+    :return: a tuple containing the angle in degrees of the line and the parameter rho and theta, or a tuple containing None, None if no line is detected.
+    """
+    image = _build_image(resolution, events)
+
+    lines = cv2.HoughLines(image, rho, theta, threshold=threshold)
+
+    if lines is not None:
+        rho, theta = lines[0][0]
+        angle_in_degrees = theta * (180 / np.pi)
+        return angle_in_degrees, (rho, theta)
+
+    return None, None
+
+
+def slice_every_events(source_events: dv.EventStore, events_by_slice: int = 800) -> list:
+    """
+    Create slices containing a specific number of events each slice.
+    :param source_events: an event store
+    :param events_by_slice: the number of events by slice
+    :return: a list of slices
+    """
+    slicer = dv.EventStreamSlicer()
+    slices = []
+
+    def slicer_callback(events: dv.EventStore) -> None:
+        slices.append(event_store_to_array(events))
+
+    slicer.doEveryNumberOfEvents(events_by_slice, slicer_callback)
+    slicer.accept(source_events)
+
+    return slices
