@@ -1,10 +1,12 @@
 import csv
 import os.path
 
+import cv2
 import dv_processing as dv
 import logging
 import sys
 import cv2 as cv
+import numpy as np
 
 logger = logging.getLogger()
 date_time_string_format = '%Y-%m-%y %H:%M:%S'
@@ -128,7 +130,7 @@ def crop_preview_area(
 
 def events_to_aedat4_file(
         events: dv.EventStore,
-        resolution: tuple = (346, 260),
+        resolution: tuple = (100, 100),
         file_name: str = 'cropped.aedat4'
 ) -> None:
     """
@@ -143,7 +145,12 @@ def events_to_aedat4_file(
     writer.writeEvents(events)
 
 
-def _handle_path(path: str) -> None:
+def handle_path(path: str) -> None:
+    """
+    Reads a path, if the directory does not exist, creates it.
+    :param path: a directory path
+    :return: None
+    """
     if not os.path.exists(path):
         logger.warning(f"The directory '{path}' does not exist. Creating...")
         try:
@@ -156,7 +163,7 @@ def _handle_path(path: str) -> None:
 def save_dict_to_csv(data: dict, csv_file_path: str):
     path, _ = os.path.split(csv_file_path)
 
-    _handle_path(path)
+    handle_path(path)
 
     with open(csv_file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
