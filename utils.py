@@ -160,7 +160,13 @@ def handle_path(path: str) -> None:
             logger.critical(f"Failed to create the directory '{path}'. Error: {e}")
 
 
-def save_dict_to_csv(data: dict, csv_file_path: str):
+def save_dict_to_csv(data: dict, csv_file_path: str) -> None:
+    """
+    Saves the given data dictionary to a CSV file with keys in the first column and values in the second column.
+    :param data: a directory
+    :param csv_file_path: path to the CSV file including the file name ended with '.csv'
+    :return: None
+    """
     path, _ = os.path.split(csv_file_path)
 
     handle_path(path)
