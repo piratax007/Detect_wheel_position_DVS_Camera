@@ -66,13 +66,10 @@ def create_gif_from(source_images_path: str, animation_path: str) -> None:
     path, _ = os.path.split(source_images_path)
     utils.handle_path(path)
 
-    images = []
     file_names = sorted(os.listdir(source_images_path),
                         key=lambda x: int(re.findall(r'\d+', x)[0]) if re.findall(r'\d+', x) else float('inf'))
-    for file_name in file_names:
-        if file_name.endswith('.png'):
-            file_path = os.path.join(source_images_path, file_name)
-            images.append(Image.open(file_path))
+
+    images = [Image.open(os.path.join(source_images_path, f)) for f in file_names if f.endswith('.png')]
 
     if images:
         images[0].save(animation_path, save_all=True, append_images=images[1:], loop=1)
@@ -86,20 +83,20 @@ if __name__ == '__main__':
     detected_angles = {}
     slices = utils.slice_every_events(source_events, 800)
 
-    for i, s in enumerate(slices):
-        angle, line_params = utils.detect_line_angle(source_resolution, s)
-        detected_angles[i] = angle
-        display_events_and_line(
-            source_resolution,
-            s,
-            line_params,
-            save_image=True,
-            image_path=f'images_dvSave-2024_11_26_11_34_19/image_slice_{i}.png'
-        )
-
-    utils.save_dict_to_csv(detected_angles, './detected_angles_dvSave-2024_11_26_11_34_19.csv')
-
-    plot_angle_evolution('./detected_angles_dvSave-2024_11_26_11_34_19.csv')
+    # for i, s in enumerate(slices):
+    #     angle, line_params = utils.detect_line_angle(source_resolution, s)
+    #     detected_angles[i] = angle
+    #     display_events_and_line(
+    #         source_resolution,
+    #         s,
+    #         line_params,
+    #         save_image=True,
+    #         image_path=f'images_dvSave-2024_11_26_11_34_19/image_slice_{i}.png'
+    #     )
+    #
+    # utils.save_dict_to_csv(detected_angles, './detected_angles_dvSave-2024_11_26_11_34_19.csv')
+    #
+    # plot_angle_evolution('./detected_angles_dvSave-2024_11_26_11_34_19.csv')
 
     create_gif_from(
         './images_dvSave-2024_11_26_11_34_19',
