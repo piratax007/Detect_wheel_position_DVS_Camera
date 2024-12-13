@@ -1,6 +1,5 @@
 import csv
 import os.path
-
 import cv2
 import dv_processing as dv
 import logging
@@ -152,7 +151,7 @@ def handle_path(path: str) -> None:
     :return: None
     """
     if not os.path.exists(path):
-        logger.warning(f"The directory '{path}' does not exist. Creating...")
+        logger.warning(f"\nThe directory '{path}' does not exist. Creating...")
         try:
             os.makedirs(path)
             logger.info(f"Successfully created the directory '{path}'.")
@@ -237,11 +236,11 @@ def detect_line_angle(
     return None, None
 
 
-def slice_every_events(source_events: dv.EventStore, events_by_slice: int = 800) -> list:
+def slice_every_events(source_events: dv.EventStore, events_per_slice: int = 800) -> list:
     """
     Create slices containing a specific number of events each slice.
     :param source_events: an event store
-    :param events_by_slice: the number of events by slice
+    :param events_per_slice: the number of events by slice
     :return: a list of slices
     """
     slicer = dv.EventStreamSlicer()
@@ -250,7 +249,7 @@ def slice_every_events(source_events: dv.EventStore, events_by_slice: int = 800)
     def slicer_callback(events: dv.EventStore) -> None:
         slices.append(event_store_to_array(events))
 
-    slicer.doEveryNumberOfEvents(events_by_slice, slicer_callback)
+    slicer.doEveryNumberOfEvents(events_per_slice, slicer_callback)
     slicer.accept(source_events)
 
     return slices
