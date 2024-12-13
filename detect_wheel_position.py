@@ -1,10 +1,12 @@
 import os
+import argparse
 from PIL import Image
 import matplotlib.pyplot as plt
 import pandas as pd
 import utils
 import numpy as np
 import re
+from tqdm import tqdm
 
 
 def display_events_and_line(
@@ -75,30 +77,100 @@ def create_gif_from(source_images_path: str, animation_path: str) -> None:
         images[0].save(animation_path, save_all=True, append_images=images[1:], loop=1)
 
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('true','t', '1'):
+        return True
+    elif v.lower() in ('false', 'f', '0'):
+        return False
+
+
+def get_execution_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description='Detect wheel position in a event dataset.',
+    )
+    parser.add_argument(
+        'aedat4',
+        type=str,
+        help='Path to the AEDAT4 file'
+    )
+    parser.add_argument(
+        '-e', '--events-per-slice',
+        type=int,
+        default=800,
+        help='Number of events per slice'
+    )
+    parser.add_argument(
+        '-r', '--rho',
+        type=int,
+        default=1,
+        help='Rho parameter of the HoughLines algorithm'
+    )
+    parser.add_argument(
+        '-t', '--theta',
+        type=float,
+        default=np.pi / 180,
+        help='Theta parameter of the HoughLines algorithm'
+    )
+    parser.add_argument(
+        '-th', '--threshold',
+        type=int,
+        default=10,
+        help='Threshold for detection'
+    )
+    parser.add_argument(
+        '-d', '--detect-wheel-position',
+        type=str2bool,
+        default=True,
+        help='Generate a directory containing one png image per processed slice and a csv file containing '
+             'the angle of the detected line in each slice'
+    )
+    parser.add_argument(
+        '-a', '--plot-angle-evolution',
+        type=str2bool,
+        default=False,
+        help='Plot and save the angle evolution.'
+    )
+    parser.add_argument(
+        '-g', '--generate-gif',
+        type=str2bool,
+        default=False,
+        help='Generate a GIF animation.'
+    )
+
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
-    data = utils.load_data_from('dataset/dvSave-2024_11_26_11_34_19.aedat4')
+    args = get_execution_arguments()
+    _, file_name = os.path.split(args.aedat4)
+    data = utils.load_data_from(args.aedat4)
     source_resolution = utils.event_stream_resolution(data)
     source_events = utils.get_events_from(data)
+    slices = utils.slice_every_events(source_events, args.events_per_slice)
 
-    detected_angles = {}
-    slices = utils.slice_every_events(source_events, 800)
+    if args.detect_wheel_position:
+        detected_angles = {}
 
-    for i, s in enumerate(slices):
-        angle, line_params = utils.detect_line_angle(source_resolution, s)
-        detected_angles[i] = angle
-        display_events_and_line(
-            source_resolution,
-            s,
-            line_params,
-            save_image=True,
-            image_path=f'images_dvSave-2024_11_26_11_34_19/image_slice_{i}.png'
+        for i, s in tqdm(enumerate(slices), total=len(slices), desc='Processing slices', ncols=80, leave=False, colour='red'):
+            angle, line_params = utils.detect_line_angle(source_resolution, s, args.rho, args.theta, args.threshold)
+            detected_angles[i] = angle
+            display_events_and_line(
+                source_resolution,
+                s,
+                line_params,
+                save_image=True,
+                image_path=f"images_{file_name.split('.')[0]}/image_slice_{i}.png"
+            )
+
+        utils.save_dict_to_csv(detected_angles, f"./detected_angles_{file_name.split('.')[0]}.csv")
+
+    if args.plot_angle_evolution:
+        plot_angle_evolution(f"./detected_angles_{file_name.split('.')[0]}.csv")
+
+    if args.generate_gif:
+        create_gif_from(
+            f"./images_{file_name.split('.')[0]}",
+            f"./images_{file_name.split('.')[0]}/reference_{file_name.split('.')[0]}.gif"
         )
-
-    utils.save_dict_to_csv(detected_angles, './detected_angles_dvSave-2024_11_26_11_34_19.csv')
-
-    plot_angle_evolution('./detected_angles_dvSave-2024_11_26_11_34_19.csv')
-
-    create_gif_from(
-        './images_dvSave-2024_11_26_11_34_19',
-        './images_dvSave-2024_11_26_11_34_19/reference_dvSave-2024_11_26_11_34_19.gif'
-    )
