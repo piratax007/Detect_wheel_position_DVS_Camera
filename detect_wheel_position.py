@@ -83,20 +83,20 @@ if __name__ == '__main__':
     detected_angles = {}
     slices = utils.slice_every_events(source_events, 800)
 
-    # for i, s in enumerate(slices):
-    #     angle, line_params = utils.detect_line_angle(source_resolution, s)
-    #     detected_angles[i] = angle
-    #     display_events_and_line(
-    #         source_resolution,
-    #         s,
-    #         line_params,
-    #         save_image=True,
-    #         image_path=f'images_dvSave-2024_11_26_11_34_19/image_slice_{i}.png'
-    #     )
-    #
-    # utils.save_dict_to_csv(detected_angles, './detected_angles_dvSave-2024_11_26_11_34_19.csv')
-    #
-    # plot_angle_evolution('./detected_angles_dvSave-2024_11_26_11_34_19.csv')
+    for i, s in enumerate(slices):
+        angle, line_params = utils.detect_line_angle(source_resolution, s)
+        detected_angles[i] = angle
+        display_events_and_line(
+            source_resolution,
+            s,
+            line_params,
+            save_image=True,
+            image_path=f'images_dvSave-2024_11_26_11_34_19/image_slice_{i}.png'
+        )
+
+    utils.save_dict_to_csv(detected_angles, './detected_angles_dvSave-2024_11_26_11_34_19.csv')
+
+    plot_angle_evolution('./detected_angles_dvSave-2024_11_26_11_34_19.csv')
 
     create_gif_from(
         './images_dvSave-2024_11_26_11_34_19',
