@@ -1,0 +1,6 @@
+dv_processing
+matplotlib
+numpy
+pandas
+Pillow
+tqdm
