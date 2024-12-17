@@ -9,9 +9,7 @@
    :caption: Content
    :maxdepth: 2
 
-   dataset
-   utils
-   detect_wheel_position
-   DV_project_files
-
-
+   Dataset
+   Utils
+   Detect wheel position <detect_wheel_position>
+   DV GUI files <DV_gui_files>
