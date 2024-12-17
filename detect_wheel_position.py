@@ -19,12 +19,14 @@ def display_events_and_line(
 ) -> None:
     """
     Presents a Matplotlib figure showing the line corresponding with the given parameters (red line) into the given set of events (blue dots).
+
     :param resolution: width and height of the figure
     :param events: The events to be displayed
     :param line_parameters: Rho and theta parameters of the line.
     :param display_image: If the image should be displayed
     :param save_image: If the image should be saved
     :param image_path: Where the image should be saved
+
     :return: None
     """
     fig = plt.figure(figsize=(resolution[0] / 100, resolution[1] / 100))
@@ -63,7 +65,9 @@ def display_events_and_line(
 def plot_angle_evolution(csv_angles_file: str) -> None:
     """
     Plots the angle evolution given in csv file.
+
     :param csv_angles_file: A CSV file containing the slice number and the angle detect on each slice.
+
     :return: None
     """
     angles_data = pd.read_csv(csv_angles_file, header=None, names=['key', 'value'])
@@ -82,8 +86,10 @@ def plot_angle_evolution(csv_angles_file: str) -> None:
 def create_gif_from(source_images_path: str, animation_path: str) -> None:
     """
     Create an animated gif from a set of png files.
+
     :param source_images_path: The path to a directory containing the png files.
     :param animation_path: The path to a directory where the animation should be saved.
+
     :return: None
     """
     path, _ = os.path.split(source_images_path)
@@ -101,7 +107,9 @@ def create_gif_from(source_images_path: str, animation_path: str) -> None:
 def str2bool(v: bool | str) -> bool:
     """
     Converts a string to bool.
+
     :param v: A string equivalent to a bool value.
+
     :return: The corresponding bool value.
     """
     if isinstance(v, bool):
