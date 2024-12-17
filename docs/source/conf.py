@@ -19,5 +19,5 @@ html_context = {
     "github_user": "piratax007",
     "github_repo": "Detect_wheel_position_DVS_Camera",
     "github_version": "main",
-    "conf_py_path": "/source/",
+    "conf_py_path": "/docs/source/",
 }
