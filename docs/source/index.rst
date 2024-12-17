@@ -2,16 +2,16 @@
    :caption: General Overview
    :maxdepth: 2
 
-   /docs/src/Introduction
-   /docs/src/Installation
+   /docs/source/Introduction
+   /docs/source/Installation
 
 .. toctree::
    :caption: Content
    :maxdepth: 2
 
-   docs/src/dataset
-   docs/src/utils
-   docs/src/detect_wheel_position
-   docs/src/DV_project_files
+   docs/source/dataset
+   docs/source/utils
+   docs/source/detect_wheel_position
+   docs/source/DV_project_files
 
 
