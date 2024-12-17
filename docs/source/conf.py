@@ -13,9 +13,3 @@ release = '0.1.0'
 master_doc = 'index'
 
 html_theme = 'sphinx_rtd_theme'
-html_theme_options = {
-    "repository_url": "https://github.com/piratax007/Detect_wheel_position_DVS_Camera",
-    "use_repository_button": True,
-}
-
-html_static_path = ['_static']
