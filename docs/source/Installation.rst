@@ -16,7 +16,7 @@ The `dv-processing` library could be installed in most of the operating systems 
 DV-GUI
 ------
 `DV-GUI` is a GUI application for visualization of datasets recorded with DV cameras. To install `DV-GUI` on other
-platforms follow the instructions `here <https://docs.inivation.com/software/dv/gui/install.html>`_.
+platforms follow the `instructions <https://docs.inivation.com/software/dv/gui/install.html>`_.
 
 .. code-block::
     :caption: Installation of `DV-GUI` on Ubuntu 22.04
