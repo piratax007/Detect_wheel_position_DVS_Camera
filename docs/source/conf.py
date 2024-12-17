@@ -29,5 +29,6 @@ autodoc_mock_imports = [
     "toml",
     "yaml",
     "opencv-python",
-    "dv_processing"
+    "dv_processing",
+    "pandas"
 ]
