@@ -5,3 +5,4 @@ pandas
 Pillow
 tqdm
 opencv-python
+sphinx-rtd-theme
