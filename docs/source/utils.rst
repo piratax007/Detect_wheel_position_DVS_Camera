@@ -1,6 +1,6 @@
 utils
 =====
 
-.. automodule:: Event_Cameras.utils
+.. automodule:: utils
     :members:
     :undoc-members:
