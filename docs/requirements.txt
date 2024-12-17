@@ -4,4 +4,4 @@ numpy
 pandas
 Pillow
 tqdm
-cv2
+opencv-python
