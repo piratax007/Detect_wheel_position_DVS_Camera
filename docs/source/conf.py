@@ -12,12 +12,9 @@ author = 'Fausto M. Lagos S. - piratax007'
 release = '0.1.0'
 master_doc = 'index'
 
-import sphinx_book_theme
-
-html_theme_path = [sphinx_book_theme.get_html_theme_path()]
 html_theme = 'sphinx_book_theme'
 html_theme_options = {
-    "repository_url": "https://github.com/btx0424/OmniDrones",
+    "repository_url": "https://github.com/piratax007/Detect_wheel_position_DVS_Camera",
     "use_repository_button": True,
 }
 
