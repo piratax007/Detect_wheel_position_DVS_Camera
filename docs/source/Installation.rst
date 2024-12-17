@@ -28,6 +28,7 @@ platforms follow the instructions `here <https://docs.inivation.com/software/dv/
 Code in this repository
 -----------------------
 To use the code in this repository install the dependencies using the `requirements.txt` file
+
 .. code-block::
     :caption: Dependencies installation
 
