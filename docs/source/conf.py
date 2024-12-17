@@ -19,16 +19,3 @@ html_theme_options = {
 }
 
 html_static_path = ['_static']
-
-# Mock out modules that are not available on RTD
-autodoc_mock_imports = [
-    "numpy",
-    "matplotlib",
-    "scipy",
-    "tqdm",
-    "toml",
-    "yaml",
-    "opencv-python",
-    "dv_processing",
-    "pandas"
-]
