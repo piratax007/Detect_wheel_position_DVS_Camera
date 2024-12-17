@@ -29,6 +29,6 @@ Code in this repository
 -----------------------
 To use the code in this repository install the dependencies using the `requirements.txt` file
 .. code-block::
-    :caption: dependencies installation
+    :caption: Dependencies installation
 
         pip3 install requirements.txt
