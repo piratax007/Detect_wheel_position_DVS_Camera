@@ -13,3 +13,11 @@ release = '0.1.0'
 master_doc = 'index'
 
 html_theme = 'sphinx_rtd_theme'
+
+html_context = {
+    "display_github": True,
+    "github_user": "piratax007",
+    "github_repo": "Detect_wheel_position_DVS_Camera",
+    "github_version": "main",
+    "conf_py_path": "/source/",
+}
